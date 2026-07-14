@@ -24,6 +24,9 @@ def gallery():
     page = request.args.get("page", 1, type=int)
     query_text = request.args.get("q", "", type=str).strip()
     category_slug = request.args.get("category", "", type=str).strip()
+    if len(query_text) > 80:
+        query_text = query_text[:80]
+        flash("La búsqueda se ha recortado a 80 caracteres.", "warning")
 
     query = GalleryImage.query.filter_by(is_public=True)
 

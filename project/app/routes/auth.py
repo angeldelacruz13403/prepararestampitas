@@ -1,7 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from app.extensions import db
 from app.forms import LoginForm, RegisterForm
 from app.models import Role, User
 from app.services.audit_service import log_session
@@ -43,9 +42,8 @@ def register():
 
         visitor_role = Role.query.filter_by(name="Visitor").first()
         if not visitor_role:
-            visitor_role = Role(name="Visitor", description="Usuario visitante")
-            db.session.add(visitor_role)
-            db.session.flush()
+            flash("El rol Visitor no está configurado en el sistema.", "danger")
+            return render_template("auth/register.html", form=form)
 
         user = User(
             name=form.name.data.strip(),

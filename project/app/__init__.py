@@ -34,7 +34,8 @@ def create_app(config_name: str | None = None) -> Flask:
     app = Flask(__name__, instance_relative_config=True)
     env = config_name or os.getenv("FLASK_ENV", "development")
     app.config.from_object(config_by_name.get(env, config_by_name["development"]))
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config["TRUSTED_PROXY_COUNT"], x_host=1)
+    if env == "production" and app.config["TRUSTED_PROXY_COUNT"] > 0:
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config["TRUSTED_PROXY_COUNT"], x_host=1)
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 

@@ -8,6 +8,9 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+MAX_PIXELS = 40_000_000
+MAX_DIMENSION = 2400
+Image.MAX_IMAGE_PIXELS = MAX_PIXELS
 
 
 def _is_allowed(filename: str) -> bool:
@@ -34,8 +37,10 @@ def save_and_optimize_image(upload_dir: str, file: FileStorage) -> tuple[str, st
     webp_file = upload_path / webp_name
 
     with Image.open(original_file) as image:
+        if image.width * image.height > MAX_PIXELS:
+            raise ValueError("Imagen demasiado grande")
         processed = image.convert("RGB") if image.mode not in ("RGB", "RGBA") else image.copy()
-        processed.thumbnail((2400, 2400))
+        processed.thumbnail((MAX_DIMENSION, MAX_DIMENSION))
         processed.save(original_file, optimize=True, quality=85)
         processed.save(webp_file, format="WEBP", quality=82, method=6)
 
