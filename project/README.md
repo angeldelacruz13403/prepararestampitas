@@ -36,6 +36,12 @@ flask --app run.py run --debug
 gunicorn -w 4 -b 127.0.0.1:8000 run:app
 ```
 
+## Reverse proxy (Nginx/Cloudflare)
+- La app usa `ProxyFix` para resolver IP/host real detrás de proxy.
+- Ajusta `TRUSTED_PROXY_COUNT` según saltos de proxy confiables:
+  - `1`: Nginx local
+  - `2+`: Nginx + CDN/proxy adicional
+
 ## Estructura
 - `app/`: núcleo Flask (factory, blueprints, modelos, servicios, forms)
 - `migrations/`: migraciones Flask-Migrate

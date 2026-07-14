@@ -14,9 +14,9 @@ public_bp = Blueprint("public", __name__)
 @public_bp.route("/")
 def home():
     featured = GalleryImage.query.filter_by(is_featured=True, is_public=True).limit(8).all()
-    services = Services.query.filter_by(is_active=True).limit(6).all()
+    active_services = Services.query.filter_by(is_active=True).limit(6).all()
     seo = build_seo_payload("Cruz Cofrade | Fotografía de Semana Santa", "Cobertura profesional de hermandades, cultos y procesiones.")
-    return render_template("public/home.html", featured=featured, services=services, seo=seo)
+    return render_template("public/home.html", featured=featured, services=active_services, seo=seo)
 
 
 @public_bp.route("/gallery")
