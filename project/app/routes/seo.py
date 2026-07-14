@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, current_app, render_template_string, url_for
+from flask import Blueprint, Response, render_template_string, url_for
 
 from app.models import GalleryImage
 
@@ -32,7 +32,7 @@ def sitemap():
     urls = [url_for(route, _external=True) for route in static_routes]
 
     for image in GalleryImage.query.filter_by(is_public=True).all():
-        urls.append(url_for("public.gallery", _external=True) + f"?image={image.id}")
+        urls.append(url_for("public.gallery", image=image.id, _external=True))
 
     xml_template = """<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">{% for u in urls %}

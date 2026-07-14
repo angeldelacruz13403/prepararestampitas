@@ -1,3 +1,5 @@
+from urllib.parse import urljoin, urlparse
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
@@ -9,6 +11,12 @@ from app.utils.security import rate_limit
 
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+
+
+def _is_safe_redirect(target: str) -> bool:
+    host_url = urlparse(request.host_url)
+    redirect_url = urlparse(urljoin(request.host_url, target))
+    return redirect_url.scheme in {"http", "https"} and host_url.netloc == redirect_url.netloc
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -25,7 +33,9 @@ def login():
             log_session(user.id)
             flash("Bienvenido de nuevo.", "success")
             next_url = request.args.get("next")
-            return redirect(next_url or url_for("public.home"))
+            if next_url and _is_safe_redirect(next_url):
+                return redirect(next_url)
+            return redirect(url_for("public.home"))
         flash("Credenciales inválidas.", "danger")
 
     return render_template("auth/login.html", form=form)

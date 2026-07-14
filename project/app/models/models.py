@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from flask_login import UserMixin
@@ -127,7 +127,7 @@ class SessionLog(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
     ip_address: Mapped[Optional[str]] = mapped_column(String(50))
     user_agent: Mapped[Optional[str]] = mapped_column(String(255))
-    logged_in_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
+    logged_in_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     user: Mapped[User] = relationship("User", back_populates="session_logs")
 
@@ -139,6 +139,6 @@ class AdminLog(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
     action: Mapped[str] = mapped_column(String(180), nullable=False)
     detail: Mapped[Optional[str]] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     user: Mapped[User] = relationship("User", back_populates="admin_logs")

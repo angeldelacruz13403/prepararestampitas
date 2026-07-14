@@ -1,11 +1,11 @@
-from flask import Blueprint, current_app, flash, render_template, request
+from flask import Blueprint, flash, render_template, request
 from sqlalchemy import or_
 
 from app.extensions import db
 from app.forms import ContactForm
 from app.models import ContactMessage, GalleryCategory, GalleryImage, Services
 from app.services.seo_service import build_seo_payload
-from app.utils.security import rate_limit
+from app.utils.security import get_client_ip, rate_limit
 
 
 public_bp = Blueprint("public", __name__)
@@ -71,7 +71,7 @@ def contact():
             email=form.email.data.lower().strip(),
             subject=form.subject.data.strip(),
             message=form.message.data.strip(),
-            ip_address=request.headers.get("X-Forwarded-For", request.remote_addr),
+            ip_address=get_client_ip(),
         )
         db.session.add(msg)
         db.session.commit()

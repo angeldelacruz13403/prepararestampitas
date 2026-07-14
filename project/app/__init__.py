@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app.config import config_by_name
 from app.extensions import csrf, db, login_manager, migrate
@@ -13,7 +14,7 @@ load_dotenv()
 
 @login_manager.user_loader
 def load_user(user_id: str):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 
 def _seed_defaults() -> None:
@@ -33,6 +34,7 @@ def create_app(config_name: str | None = None) -> Flask:
     app = Flask(__name__, instance_relative_config=True)
     env = config_name or os.getenv("FLASK_ENV", "development")
     app.config.from_object(config_by_name.get(env, config_by_name["development"]))
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=app.config["TRUSTED_PROXY_COUNT"], x_host=1)
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 

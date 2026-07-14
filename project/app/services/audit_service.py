@@ -2,13 +2,14 @@ from flask import request
 
 from app.extensions import db
 from app.models import AdminLog, SessionLog
+from app.utils.security import get_client_ip
 
 
 def log_session(user_id: int) -> None:
     db.session.add(
         SessionLog(
             user_id=user_id,
-            ip_address=request.headers.get("X-Forwarded-For", request.remote_addr),
+            ip_address=get_client_ip(),
             user_agent=(request.user_agent.string if request.user_agent else None),
         )
     )

@@ -9,7 +9,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-change-me")
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
-        "******127.0.0.1:3306/cruzcofrade",
+        f"sqlite:///{BASE_DIR / 'instance' / 'dev.db'}",
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH", 16 * 1024 * 1024))
@@ -20,6 +20,7 @@ class Config:
     REMEMBER_COOKIE_HTTPONLY = True
     REMEMBER_COOKIE_SECURE = os.getenv("REMEMBER_COOKIE_SECURE", "true").lower() == "true"
     WTF_CSRF_TIME_LIMIT = 3600
+    TRUSTED_PROXY_COUNT = int(os.getenv("TRUSTED_PROXY_COUNT", "1"))
 
 
 class DevelopmentConfig(Config):
