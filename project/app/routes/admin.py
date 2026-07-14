@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app.extensions import db
@@ -57,7 +57,7 @@ def gallery():
 
     if form.validate_on_submit() and form.image.data:
         original_name, webp_name = save_and_optimize_image(
-            upload_dir=request.app.config["UPLOAD_FOLDER"] if hasattr(request, "app") else db.get_app().config["UPLOAD_FOLDER"],
+            upload_dir=current_app.config["UPLOAD_FOLDER"],
             file=form.image.data,
         )
         image = GalleryImage(
