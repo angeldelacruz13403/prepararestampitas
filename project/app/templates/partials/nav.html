@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg bg-light border-bottom">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('public.home') }}">Cruz Cofrade</a>
+    <div class="navbar-nav">
+      <a class="nav-link" href="{{ url_for('public.gallery') }}">Galería</a>
+      <a class="nav-link" href="{{ url_for('public.services') }}">Servicios</a>
+      <a class="nav-link" href="{{ url_for('public.about') }}">Sobre mí</a>
+      <a class="nav-link" href="{{ url_for('public.contact') }}">Contacto</a>
+      {% if current_user.is_authenticated %}
+        <a class="nav-link" href="{{ url_for('auth.profile') }}">Perfil</a>
+        {% if current_user.has_role('Admin') or current_user.has_role('Editor') %}
+          <a class="nav-link" href="{{ url_for('admin.dashboard') }}">Admin</a>
+        {% endif %}
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">Salir</a>
+      {% else %}
+        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+        <a class="nav-link" href="{{ url_for('auth.register') }}">Registro</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Galería</h1>
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-4">
+    <input class="form-control" name="q" value="{{ current_query }}" placeholder="Buscar">
+  </div>
+  <div class="col-md-4">
+    <select class="form-select" name="category">
+      <option value="">Todas las categorías</option>
+      {% for cat in categories %}
+      <option value="{{ cat.slug }}" {% if current_category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-dark w-100">Filtrar</button></div>
+</form>
+<div class="row g-3">
+  {% for item in images.items %}
+  <div class="col-sm-6 col-lg-4">
+    <article class="card h-100">
+      <img loading="lazy" class="card-img-top" src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="{{ item.alt_text or item.title }}">
+      <div class="card-body">
+        <h2 class="h5">{{ item.title }}</h2>
+        <p class="small text-muted">{{ item.category.name }}</p>
+      </div>
+    </article>
+  </div>
+  {% else %}
+  <p>No se encontraron resultados.</p>
+  {% endfor %}
+</div>
+<nav class="mt-3">
+  {% if images.has_prev %}<a href="{{ url_for('public.gallery', page=images.prev_num, q=current_query, category=current_category) }}">← Anterior</a>{% endif %}
+  {% if images.has_next %}<a class="ms-3" href="{{ url_for('public.gallery', page=images.next_num, q=current_query, category=current_category) }}">Siguiente →</a>{% endif %}
+</nav>
+{% endblock %}

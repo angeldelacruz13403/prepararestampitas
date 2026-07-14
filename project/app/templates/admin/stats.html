@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Estadísticas</h1>
+<ul>
+  <li>Total imágenes: {{ stats.total_images }}</li>
+  <li>Destacadas: {{ stats.featured_images }}</li>
+  <li>Públicas: {{ stats.public_images }}</li>
+</ul>
+{% endblock %}

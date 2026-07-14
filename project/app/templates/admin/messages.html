@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Mensajes</h1>
+<table class="table table-sm"><thead><tr><th>Nombre</th><th>Asunto</th><th>Email</th></tr></thead><tbody>{% for item in records %}<tr><td>{{ item.name }}</td><td>{{ item.subject }}</td><td>{{ item.email }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}

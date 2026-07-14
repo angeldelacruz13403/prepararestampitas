@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="text-center py-4">
+  <h1>Fotografía de Semana Santa</h1>
+  <p>Reportajes cofrades con enfoque documental y artístico.</p>
+</section>
+<h2>Galería destacada</h2>
+<div class="row g-3">
+  {% for img in featured %}
+  <div class="col-md-3">
+    <div class="card h-100">
+      <img loading="lazy" class="card-img-top" src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="{{ img.alt_text or img.title }}">
+      <div class="card-body"><strong>{{ img.title }}</strong></div>
+    </div>
+  </div>
+  {% else %}
+  <p>No hay imágenes destacadas todavía.</p>
+  {% endfor %}
+</div>
+{% endblock %}

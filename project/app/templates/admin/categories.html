@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Categorías</h1>
+<form method="post" class="row g-2 mb-4">
+  {{ form.hidden_tag() }}
+  <div class="col-md-3">{{ form.name(class='form-control', placeholder='Nombre') }}</div>
+  <div class="col-md-3">{{ form.slug(class='form-control', placeholder='slug') }}</div>
+  <div class="col-md-4">{{ form.description(class='form-control', placeholder='Descripción') }}</div>
+  <div class="col-md-2">{{ form.submit(class='btn btn-dark w-100') }}</div>
+</form>
+<table class="table table-sm">
+  <thead><tr><th>Nombre</th><th>Slug</th><th>Activa</th></tr></thead>
+  <tbody>
+    {% for row in records %}<tr><td>{{ row.name }}</td><td>{{ row.slug }}</td><td>{{ 'Sí' if row.is_active else 'No' }}</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

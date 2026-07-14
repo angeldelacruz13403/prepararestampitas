@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Ajustes</h1>
+<form method="post" class="row g-3">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  <div class="col-md-6"><input class="form-control" name="site_name" value="{{ record.site_name }}" placeholder="Nombre del sitio"></div>
+  <div class="col-md-6"><input class="form-control" name="contact_email" value="{{ record.contact_email or '' }}" placeholder="Email"></div>
+  <div class="col-12"><textarea class="form-control" name="site_description" rows="4">{{ record.site_description }}</textarea></div>
+  <div class="col-12"><button class="btn btn-dark">Guardar</button></div>
+</form>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Servicios</h1>
+<div class="row g-3">
+  {% for service in services %}
+    <div class="col-md-4"><div class="card h-100"><div class="card-body"><h2 class="h5">{{ service.title }}</h2><p>{{ service.description }}</p></div></div></div>
+  {% else %}
+    <p>No hay servicios publicados.</p>
+  {% endfor %}
+</div>
+{% endblock %}

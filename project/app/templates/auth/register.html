@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Registro</h1>
+<form method="post" class="row g-3">
+  {{ form.hidden_tag() }}
+  <div class="col-md-6">{{ form.name(class='form-control', placeholder='Nombre') }}</div>
+  <div class="col-md-6">{{ form.email(class='form-control', placeholder='Email') }}</div>
+  <div class="col-md-6">{{ form.password(class='form-control', placeholder='Contraseña') }}</div>
+  <div class="col-md-6">{{ form.confirm_password(class='form-control', placeholder='Confirmar contraseña') }}</div>
+  <div class="col-12">{{ form.submit(class='btn btn-dark') }}</div>
+</form>
+{% endblock %}
