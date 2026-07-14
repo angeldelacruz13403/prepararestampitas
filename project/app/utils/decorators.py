@@ -12,7 +12,7 @@ def roles_required(*roles: str):
         def wrapped(*args, **kwargs):
             if not current_user.is_authenticated:
                 abort(401)
-            if not current_user.role or current_user.role.name.lower() not in allowed:
+            if not current_user.role or not current_user.role.name or current_user.role.name.lower() not in allowed:
                 abort(403)
             return func(*args, **kwargs)
 

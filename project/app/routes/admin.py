@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
+from email_validator import EmailNotValidError, validate_email
 
 from app.extensions import db
 from app.forms import CategoryForm, GalleryImageForm
@@ -109,7 +110,15 @@ def settings():
     if request.method == "POST":
         record.site_name = request.form.get("site_name", record.site_name).strip()
         record.site_description = request.form.get("site_description", record.site_description).strip()
-        record.contact_email = request.form.get("contact_email", record.contact_email)
+        raw_email = (request.form.get("contact_email") or "").strip()
+        if raw_email:
+            try:
+                record.contact_email = validate_email(raw_email, check_deliverability=False).normalized
+            except EmailNotValidError:
+                flash("El email de contacto no es válido.", "danger")
+                return render_template("admin/settings.html", record=record)
+        else:
+            record.contact_email = None
         db.session.commit()
         log_admin_action(current_user.id, "update_settings")
         flash("Ajustes guardados.", "success")

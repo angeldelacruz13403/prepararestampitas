@@ -34,10 +34,9 @@ def save_and_optimize_image(upload_dir: str, file: FileStorage) -> tuple[str, st
     webp_file = upload_path / webp_name
 
     with Image.open(original_file) as image:
-        image.thumbnail((2400, 2400))
-        if image.mode not in ("RGB", "RGBA"):
-            image = image.convert("RGB")
-        image.save(original_file, optimize=True, quality=85)
-        image.save(webp_file, format="WEBP", quality=82, method=6)
+        processed = image.convert("RGB") if image.mode not in ("RGB", "RGBA") else image.copy()
+        processed.thumbnail((2400, 2400))
+        processed.save(original_file, optimize=True, quality=85)
+        processed.save(webp_file, format="WEBP", quality=82, method=6)
 
     return original_name, webp_name
